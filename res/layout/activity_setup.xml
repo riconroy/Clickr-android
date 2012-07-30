@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp" >
+
+    <!-- putting the start button here, as an anchor for the scrolling section -->
+    
+    <LinearLayout
+        android:id="@+id/start_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical" >
+
+    <!-- spacer before the start button -->
+
+    <View
+        android:id="@+id/startbutton_divider"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginBottom="5dip"
+        android:layout_marginTop="5dip"
+        android:background="#808080" />
+
+    <Button
+        android:id="@+id/start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dip"
+        android:text="@string/start"
+        android:textSize="15dip" />
+        
+    </LinearLayout>
+
+    <!-- the title section, where the user's layout is named -->
+
+    <TextView
+        android:id="@+id/layout_name_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/layout_name"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/layout_name"
+        android:text="@string/layout_name"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <EditText
+        android:id="@+id/layout_name"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:ems="10"
+        android:hint="@string/layout_hint"
+        android:imeOptions="actionDone"
+        android:singleLine="true" >
+    </EditText>
+
+    <!-- spacer before load and save buttons -->
+
+    <View
+        android:id="@+id/first_divider"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/layout_name"
+        android:layout_marginBottom="5dip"
+        android:layout_marginTop="5dip"
+        android:background="#808080" />
+
+    <!-- load and save buttons -->
+
+    <Button
+        android:id="@+id/save_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/first_divider"
+        android:layout_marginLeft="0dip"
+        android:layout_toLeftOf="@+id/load_layout"
+        android:text="@string/save_layout"
+        android:textSize="15dip" />
+
+    <Button
+        android:id="@+id/load_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/first_divider"
+        android:layout_marginLeft="20dip"
+        android:layout_toLeftOf="@+id/clear_layout"
+        android:text="@string/load_layout"
+        android:textSize="15dip" />
+
+    <Button
+        android:id="@+id/clear_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/first_divider"
+        android:layout_marginLeft="0dip"
+        android:text="@string/clear_layout"
+        android:textSize="15dip" />
+
+    <!-- spacer before the radio buttons -->
+
+    <View
+        android:id="@+id/second_divider"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@+id/load_layout"
+        android:layout_marginBottom="5dip"
+        android:layout_marginTop="5dip"
+        android:background="#808080" />
+
+    <!-- let's scroll the rest of the contents, to the end -->
+
+    <ScrollView
+        android:id="@+id/scroller"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/second_divider"
+        android:layout_above="@+id/start_button" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp" >
+
+            <!-- radio buttons ("how many categories") -->
+
+            <TextView
+                android:id="@+id/radiobuttons_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/second_divider"
+                android:layout_marginLeft="15dip"
+                android:text="@string/how_many_cats"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <ca.riffer.clickr.ToggleButtonGroupTableLayout
+                android:id="@+id/radio_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/radiobuttons_title"
+                android:onClick="onCatRadioClick" >
+
+                <TableRow>
+
+                    <RadioButton
+                        android:id="@+id/rad1"
+                        android:layout_width="90dip"
+                        android:layout_height="25dip"
+                        android:onClick="onCatRadioClick"
+                        android:text="@string/one"
+                        android:textSize="12dip" />
+
+                    <RadioButton
+                        android:id="@+id/rad2"
+                        android:layout_width="90dip"
+                        android:layout_height="25dip"
+                        android:text="@string/two"
+                        android:textSize="12dip" />
+
+                    <RadioButton
+                        android:id="@+id/rad3"
+                        android:layout_width="90dip"
+                        android:layout_height="25dip"
+                        android:text="@string/three"
+                        android:textSize="12dip" />
+                </TableRow>
+
+                <TableRow>
+
+                    <RadioButton
+                        android:id="@+id/rad4"
+                        android:layout_width="90dip"
+                        android:layout_height="25dip"
+                        android:text="@string/four"
+                        android:textSize="12dip" />
+
+                    <RadioButton
+                        android:id="@+id/rad5"
+                        android:layout_width="90dip"
+                        android:layout_height="25dip"
+                        android:text="@string/five"
+                        android:textSize="12dip" />
+
+                    <RadioButton
+                        android:id="@+id/rad6"
+                        android:layout_width="90dip"
+                        android:layout_height="25dip"
+                        android:text="@string/six"
+                        android:textSize="12dip" />
+                </TableRow>
+            </ca.riffer.clickr.ToggleButtonGroupTableLayout>
+
+            <!-- spacer before the individual category lines -->
+
+            <View
+                android:id="@+id/third_divider"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_below="@+id/radio_group"
+                android:layout_marginBottom="5dip"
+                android:layout_marginTop="5dip"
+                android:background="#808080" />
+
+            <!-- first of six category lines -->
+
+            <RelativeLayout
+                android:id="@+id/layout_cat1"
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:layout_below="@+id/third_divider"
+                android:paddingTop="5dp" >
+
+                <TextView
+                    android:id="@+id/title_cat1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/text_cat1"
+                    android:layout_alignParentLeft="true"
+                    android:text="@string/cat_one"
+                    android:textSize="10sp" />
+
+                <EditText
+                    android:id="@+id/text_cat1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:layout_toLeftOf="@+id/colours_cat1"
+                    android:layout_toRightOf="@+id/title_cat1"
+                    android:ems="7"
+                    android:hint="@string/layout_hint"
+                    android:imeOptions="actionDone"
+                    android:singleLine="true" />
+
+                <Button
+                    android:id="@+id/colours_cat1"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/white"
+                    android:text="" />
+            </RelativeLayout>
+
+            <!-- spacer between the individual category lines -->
+
+            <View
+                android:id="@+id/cat_divider1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/layout_cat1"
+                android:layout_marginBottom="5dip"
+                android:layout_marginTop="5dip"
+                android:background="#A0A0A0" />
+
+            <!-- second of six category lines -->
+
+            <RelativeLayout
+                android:id="@+id/layout_cat2"
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:layout_below="@+id/cat_divider1"
+                android:paddingTop="5dp" >
+
+                <TextView
+                    android:id="@+id/title_cat2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/text_cat2"
+                    android:layout_alignParentLeft="true"
+                    android:text="@string/cat_two"
+                    android:textSize="10sp" />
+
+                <EditText
+                    android:id="@+id/text_cat2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:layout_toLeftOf="@+id/colours_cat2"
+                    android:layout_toRightOf="@+id/title_cat2"
+                    android:ems="7"
+                    android:hint="@string/layout_hint"
+                    android:imeOptions="actionDone"
+                    android:singleLine="true" />
+
+                <Button
+                    android:id="@+id/colours_cat2"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/white"
+                    android:text="" />
+            </RelativeLayout>
+
+            <!-- spacer between the individual category lines -->
+
+            <View
+                android:id="@+id/cat_divider2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/layout_cat2"
+                android:layout_marginBottom="5dip"
+                android:layout_marginTop="5dip"
+                android:background="#A0A0A0" />
+
+            <!-- third of six category lines -->
+
+            <RelativeLayout
+                android:id="@+id/layout_cat3"
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:layout_below="@+id/cat_divider2"
+                android:paddingTop="5dp" >
+
+                <TextView
+                    android:id="@+id/title_cat3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/text_cat3"
+                    android:layout_alignParentLeft="true"
+                    android:text="@string/cat_three"
+                    android:textSize="10sp" />
+
+                <EditText
+                    android:id="@+id/text_cat3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:layout_toLeftOf="@+id/colours_cat3"
+                    android:layout_toRightOf="@+id/title_cat3"
+                    android:ems="7"
+                    android:hint="@string/layout_hint"
+                    android:imeOptions="actionDone"
+                    android:singleLine="true" />
+
+                <Button
+                    android:id="@+id/colours_cat3"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/white"
+                    android:text="" />
+            </RelativeLayout>
+
+            <!-- spacer between the individual category lines -->
+
+            <View
+                android:id="@+id/cat_divider3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/layout_cat3"
+                android:layout_marginBottom="5dip"
+                android:layout_marginTop="5dip"
+                android:background="#A0A0A0" />
+
+            <!-- fourth of six category lines -->
+
+            <RelativeLayout
+                android:id="@+id/layout_cat4"
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:layout_below="@+id/cat_divider3"
+                android:paddingTop="5dp" >
+
+                <TextView
+                    android:id="@+id/title_cat4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/text_cat4"
+                    android:layout_alignParentLeft="true"
+                    android:text="@string/cat_four"
+                    android:textSize="10sp" />
+
+                <EditText
+                    android:id="@+id/text_cat4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:layout_toLeftOf="@+id/colours_cat4"
+                    android:layout_toRightOf="@+id/title_cat4"
+                    android:ems="7"
+                    android:hint="@string/layout_hint"
+                    android:imeOptions="actionDone"
+                    android:singleLine="true" />
+
+                <Button
+                    android:id="@+id/colours_cat4"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/white"
+                    android:text="" />
+            </RelativeLayout>
+
+            <!-- spacer between the individual category lines -->
+
+            <View
+                android:id="@+id/cat_divider4"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/layout_cat4"
+                android:layout_marginBottom="5dip"
+                android:layout_marginTop="5dip"
+                android:background="#A0A0A0" />
+
+            <!-- fifth of six category lines -->
+
+            <RelativeLayout
+                android:id="@+id/layout_cat5"
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:layout_below="@+id/cat_divider4"
+                android:paddingTop="5dp" >
+
+                <TextView
+                    android:id="@+id/title_cat5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/text_cat5"
+                    android:layout_alignParentLeft="true"
+                    android:text="@string/cat_five"
+                    android:textSize="10sp" />
+
+                <EditText
+                    android:id="@+id/text_cat5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:layout_toLeftOf="@+id/colours_cat5"
+                    android:layout_toRightOf="@+id/title_cat5"
+                    android:ems="7"
+                    android:hint="@string/layout_hint"
+                    android:imeOptions="actionDone"
+                    android:singleLine="true" />
+
+                <Button
+                    android:id="@+id/colours_cat5"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/white"
+                    android:text="" />
+            </RelativeLayout>
+
+            <!-- spacer between the individual category lines -->
+
+            <View
+                android:id="@+id/cat_divider5"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/layout_cat5"
+                android:layout_marginBottom="5dip"
+                android:layout_marginTop="5dip"
+                android:background="#A0A0A0" />
+
+            <!-- sixth of six category lines -->
+
+            <RelativeLayout
+                android:id="@+id/layout_cat6"
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:layout_below="@+id/cat_divider5"
+                android:paddingTop="5dp" >
+
+                <TextView
+                    android:id="@+id/title_cat6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/text_cat6"
+                    android:layout_alignParentLeft="true"
+                    android:text="@string/cat_six"
+                    android:textSize="10sp" />
+
+                <EditText
+                    android:id="@+id/text_cat6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:layout_toLeftOf="@+id/colours_cat6"
+                    android:layout_toRightOf="@+id/title_cat6"
+                    android:ems="7"
+                    android:hint="@string/layout_hint"
+                    android:imeOptions="actionDone"
+                    android:singleLine="true" />
+
+                <Button
+                    android:id="@+id/colours_cat6"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/white"
+                    android:text="" />
+            </RelativeLayout>
+
+            <!-- spacer at the end of individual category lines -->
+
+            <View
+                android:id="@+id/cat_divider6"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/layout_cat6"
+                android:layout_marginBottom="5dip"
+                android:layout_marginTop="5dip"
+                android:background="#A0A0A0" />
+
+            <!-- END of the category lines -->
+
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

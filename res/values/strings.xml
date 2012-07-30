@@ -1,0 +1,30 @@
+<resources>
+
+    <string name="app_name">Clickr</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_setup">Clickr</string>
+    
+    <string name="layout_name">Layout Name:</string>
+    <string name="layout_hint"> </string>
+    <string name="load_layout">Open</string>
+    <string name="save_layout">Save</string>
+    <string name="clear_layout">Clear</string>
+    <string name="how_many_cats">How many categories?</string>
+    <string name="start">Start</string>
+    
+    <string name="one">one</string>
+    <string name="two">two</string>
+    <string name="three">three</string>
+    <string name="four">four</string>
+    <string name="five">five</string>
+    <string name="six">six</string>
+    
+    <string name="cat_one">cat.1 name:</string>
+    <string name="cat_two">cat.2 name:</string>
+    <string name="cat_three">cat.3 name:</string>
+    <string name="cat_four">cat.4 name:</string>
+    <string name="cat_five">cat.5 name:</string>
+    <string name="cat_six">cat.6 name:</string>
+
+</resources>
