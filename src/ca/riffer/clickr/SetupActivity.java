@@ -15,7 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
 public class SetupActivity extends Activity {
-	//private static final String TAG = "SetupActivity";
+	// private static final String TAG = "SetupActivity";
 	RadioButton cat1, cat2, cat3, cat4, cat5, cat6;
 	RelativeLayout llcat1, llcat2, llcat3, llcat4, llcat5, llcat6;
 	View lldivider1, lldivider2, lldivider3, lldivider4, lldivider5, lldivider6;
