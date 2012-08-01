@@ -8,7 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="11"
+        android:layout_weight="7"
         android:orientation="horizontal"
         android:padding="5dp" >
 
@@ -37,7 +37,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="11"
+        android:layout_weight="7"
         android:orientation="horizontal"
         android:padding="5dp" >
 
@@ -56,6 +56,35 @@
 
         <Button
             android:id="@+id/button4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#a09a09"
+            android:textSize="15dip" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="7"
+        android:orientation="horizontal"
+        android:padding="5dp" >
+
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#456456"
+            android:textSize="15dip" />
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="0dp"
+            android:background="#808080" />
+
+        <Button
+            android:id="@+id/button6"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

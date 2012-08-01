@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- salmon, blue, green, orange, pink, lime, forest -->
+
+    <array name="colors">
+        <item>#d0b0b0</item>
+        <item>#00bfff</item>
+        <item>#7ccc00</item>
+        <item>#dd8c00</item>
+        <item>#cc84c3</item>
+        <item>#a09a09</item>
+        <item>#678678</item>
+    </array>
+    
+    <!--  colours just a touch lighter than the above -->
+
+    <array name="colors_light">
+        <item>#f2d2d2</item>
+        <item>#22dfff</item>
+        <item>#9eee22</item>
+        <item>#ffae22</item>
+        <item>#eea6e5</item>
+        <item>#c2ac2a</item>
+        <item>#89a89a</item>
+    </array>
+
+</resources>

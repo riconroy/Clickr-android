@@ -242,7 +242,7 @@
                     android:layout_height="40dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginLeft="10dp"
-                    android:background="@color/white"
+                    android:background="#eeeeee"
                     android:text="" />
             </RelativeLayout>
 
@@ -293,9 +293,11 @@
                     android:layout_height="40dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginLeft="10dp"
-                    android:background="@color/white"
+                    android:background="#eeeeee"
                     android:text="" />
             </RelativeLayout>
+            
+            <!-- android:background="@color/white" -->
 
             <!-- spacer between the individual category lines -->
 
@@ -344,7 +346,7 @@
                     android:layout_height="40dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginLeft="10dp"
-                    android:background="@color/white"
+                    android:background="#eeeeee"
                     android:text="" />
             </RelativeLayout>
 
@@ -395,7 +397,7 @@
                     android:layout_height="40dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginLeft="10dp"
-                    android:background="@color/white"
+                    android:background="#eeeeee"
                     android:text="" />
             </RelativeLayout>
 
@@ -446,7 +448,7 @@
                     android:layout_height="40dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginLeft="10dp"
-                    android:background="@color/white"
+                    android:background="#eeeeee"
                     android:text="" />
             </RelativeLayout>
 
@@ -497,7 +499,7 @@
                     android:layout_height="40dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginLeft="10dp"
-                    android:background="@color/white"
+                    android:background="#eeeeee"
                     android:text="" />
             </RelativeLayout>
 

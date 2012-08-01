@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="5dp" >
-
-    <View
-        android:id="@+id/anchor"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_centerVertical="true" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/anchor"
-        android:layout_alignParentTop="true"
+        android:layout_height="0dp"
+        android:layout_weight="11"
         android:orientation="horizontal"
         android:padding="5dp" >
 
@@ -24,23 +18,54 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="#d0b0b0"
-            android:textSize="15sp" />
+            android:textSize="15dip" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@id/anchor"
-        android:orientation="horizontal" >
+        android:layout_height="0dp"
+        android:layout_weight="11"
+        android:orientation="horizontal"
+        android:padding="5dp" >
 
         <Button
             android:id="@+id/button2"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_margin="5dp"
+            android:layout_weight="1"
             android:background="#456456"
-            android:textSize="15sp" />
+            android:textSize="15dip" />
     </LinearLayout>
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="horizontal"
+        android:padding="1dp" >
+
+        <Button
+            android:id="@+id/setup"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/setup"
+            android:onClick="backToSetup"
+            android:textSize="15dip" />
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="0dp"
+            android:background="#808080" />
+
+        <Button
+            android:id="@+id/reset"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:text="@string/reset"
+            android:onClick="resetCounters"
+            android:textSize="15dip" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -12,6 +12,8 @@
     <string name="clear_layout">Clear</string>
     <string name="how_many_cats">How many categories?</string>
     <string name="start">Start</string>
+    <string name="reset">Reset Counters</string>
+    <string name="setup">Setup</string>
     
     <string name="one">one</string>
     <string name="two">two</string>

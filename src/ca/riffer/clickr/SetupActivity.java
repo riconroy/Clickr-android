@@ -5,8 +5,9 @@ import java.util.Arrays;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.view.Menu;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,94 +16,86 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
 public class SetupActivity extends Activity {
-	// private static final String TAG = "SetupActivity";
-	RadioButton cat1, cat2, cat3, cat4, cat5, cat6;
-	RelativeLayout llcat1, llcat2, llcat3, llcat4, llcat5, llcat6;
-	View lldivider1, lldivider2, lldivider3, lldivider4, lldivider5, lldivider6;
-	EditText layoutName, catName1, catName2, catName3, catName4, catName5, catName6; 
-	Button buttonCat1, buttonCat2, buttonCat3, buttonCat4, buttonCat5, buttonCat6;
+	private static final String TAG = "SetupActivity";
 	
-	int buttonCount;
+	private int[] allRads = {R.id.rad1, R.id.rad2, R.id.rad3, R.id.rad4, R.id.rad5, R.id.rad6};
+	private int[] allCatNames = {R.id.text_cat1, R.id.text_cat2, R.id.text_cat3, R.id.text_cat4, R.id.text_cat5, R.id.text_cat6};
+	private int[] allColours = {R.id.colours_cat1, R.id.colours_cat2, R.id.colours_cat3, R.id.colours_cat4, R.id.colours_cat5, R.id.colours_cat6};
 
-	// maintain a list of different colours, and pointers to what those colours are (one for each button in setup activity)
-	private ArrayList<Integer> colourValues;
-	private ArrayList<Integer> colourPointers = new ArrayList<Integer> (Arrays.asList(
-			0, 0, 0, 0, 0, 0));
+	// maintain a counter for each button (not needed until CountingActivity, but start with a zeroed array)
+	private ArrayList<Integer> catCounters = new ArrayList<Integer> (Arrays.asList(0, 0, 0, 0, 0, 0));
+
+	// this is where we'll store the colour variables
+	private TypedArray colourValues;
+
+	int buttonCount = 6;
+
+	// maintain a list of pointers to each button's current colour
+	private ArrayList<Integer> colourPointers = new ArrayList<Integer> (Arrays.asList(0, 0, 0, 0, 0, 0));
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setup);
+		Log.i(TAG, "layout is fine");
 
-		// choosing the number of categories
-		cat1 = (RadioButton) findViewById(R.id.rad1);
-		cat2 = (RadioButton) findViewById(R.id.rad2);
-		cat3 = (RadioButton) findViewById(R.id.rad3);
-		cat4 = (RadioButton) findViewById(R.id.rad4);
-		cat5 = (RadioButton) findViewById(R.id.rad5);
-		cat6 = (RadioButton) findViewById(R.id.rad6);
-		cat1.setOnClickListener(myOptionOnClickListener);
-		cat2.setOnClickListener(myOptionOnClickListener);
-		cat3.setOnClickListener(myOptionOnClickListener);
-		cat4.setOnClickListener(myOptionOnClickListener);
-		cat5.setOnClickListener(myOptionOnClickListener);
-		cat6.setOnClickListener(myOptionOnClickListener);
-		
-		// start off (arbitrarily) at 6
-		buttonCount = 6;
-		cat6.setChecked(true);
-
-		// if fewer than 6 categories chosen, the un-needed ones can disappear
-		llcat1 = (RelativeLayout) findViewById(R.id.layout_cat1);
-		llcat2 = (RelativeLayout) findViewById(R.id.layout_cat2);
-		llcat3 = (RelativeLayout) findViewById(R.id.layout_cat3);
-		llcat4 = (RelativeLayout) findViewById(R.id.layout_cat4);
-		llcat5 = (RelativeLayout) findViewById(R.id.layout_cat5);
-		llcat6 = (RelativeLayout) findViewById(R.id.layout_cat6);
-		lldivider1 = (View) findViewById(R.id.cat_divider1);
-		lldivider2 = (View) findViewById(R.id.cat_divider2);
-		lldivider3 = (View) findViewById(R.id.cat_divider3);
-		lldivider4 = (View) findViewById(R.id.cat_divider4);
-		lldivider5 = (View) findViewById(R.id.cat_divider5);
-		lldivider6 = (View) findViewById(R.id.cat_divider6);
+		// choosing the number of categories (by radio buttons)
+		for (int i = 0; i < allRads.length; i++) {
+			findViewById(allRads[i]).setOnClickListener(myOptionOnClickListener);
+		}
 
 		// the clear button clears the values in the setup screen
-		Button clearButton = (Button) findViewById(R.id.clear_layout);
-		clearButton.setOnClickListener(myClearButtonClickListener);
+		findViewById(R.id.clear_layout).setOnClickListener(myClearButtonClickListener);
 
 		// the start button moves to the next screen (activity)
-		Button startButton = (Button) findViewById(R.id.start);
-		startButton.setOnClickListener(myStartButtonClickListener);
-		
-		// layout name, and name of each category
-		layoutName = (EditText) findViewById(R.id.layout_name);
-		catName1 = (EditText) findViewById(R.id.text_cat1);
-		catName2 = (EditText) findViewById(R.id.text_cat2);
-		catName3 = (EditText) findViewById(R.id.text_cat3);
-		catName4 = (EditText) findViewById(R.id.text_cat4);
-		catName5 = (EditText) findViewById(R.id.text_cat5);
-		catName6 = (EditText) findViewById(R.id.text_cat6);
+		findViewById(R.id.start).setOnClickListener(myStartButtonClickListener);
 
 		// choosing the colours for the buttons
-		buttonCat1 = (Button) findViewById(R.id.colours_cat1);
-		buttonCat2 = (Button) findViewById(R.id.colours_cat2);
-		buttonCat3 = (Button) findViewById(R.id.colours_cat3);
-		buttonCat4 = (Button) findViewById(R.id.colours_cat4);
-		buttonCat5 = (Button) findViewById(R.id.colours_cat5);
-		buttonCat6 = (Button) findViewById(R.id.colours_cat6);
-		buttonCat1.setOnClickListener(myColourListener);
-		buttonCat2.setOnClickListener(myColourListener);
-		buttonCat3.setOnClickListener(myColourListener);
-		buttonCat4.setOnClickListener(myColourListener);
-		buttonCat5.setOnClickListener(myColourListener);
-		buttonCat6.setOnClickListener(myColourListener);
+		for (int i = 0; i < allColours.length; i++) {
+			findViewById(allColours[i]).setOnClickListener(myColourListener);
+		}
 
-		// this should be moved out of here, and into a resource
-		colourValues = new ArrayList<Integer> (Arrays.asList(
-				getResources().getColor(R.color.white), getResources().getColor(R.color.blue), getResources().getColor(R.color.green),
-				getResources().getColor(R.color.orange), getResources().getColor(R.color.pink), getResources().getColor(R.color.violet)));
+		// we'll need the colours array from the resources
+		colourValues = getResources().obtainTypedArray(R.array.colors);
+
+		// retrieve values from the parent
+		EditText layout_name = (EditText) findViewById(R.id.layout_name);
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			buttonCount = extras.getInt("buttonCount");
+			Log.i(TAG, "resetting button count in extras to"+ buttonCount);
+			ArrayList<String> textArray = extras.getStringArrayList("textArray");
+			colourPointers = extras.getIntegerArrayList("colourPtrs");
+			catCounters = extras.getIntegerArrayList("catCounters");
+			layout_name.setText(extras.getString("layout_name"));
+			resetCategoryNames(textArray);
+			changeCatCount(buttonCount);
+		}
+
+		// Check whether we're recreating a previously destroyed instance
+		if (savedInstanceState != null) {
+			// Restore value of members from saved state
+			
+			buttonCount = savedInstanceState.getInt("buttonCount");
+			Log.i(TAG, "resetting button count in saved instance to"+ buttonCount);
+			colourPointers = savedInstanceState.getIntegerArrayList("colourPointers");
+			layout_name.setText(savedInstanceState.getString("layout_name"));
+			catCounters = savedInstanceState.getIntegerArrayList("catCounters");
+			ArrayList<String> catNames = savedInstanceState.getStringArrayList("catNames");
+			resetCategoryNames(catNames);
+			changeCatCount(buttonCount);
+		}
+		resetColourButtons(colourPointers);
+
+		RadioButton rad = (RadioButton) findViewById(allRads[buttonCount - 1]);
+		rad.setChecked(true);
 	}
 
+	/**
+	 *  Listeners
+	 */
+
+	// radio buttons change the number of categories needed
 	RadioButton.OnClickListener myOptionOnClickListener = new RadioButton.OnClickListener() {
 		@Override
 		public void onClick(View v) {
@@ -112,119 +105,51 @@ public class SetupActivity extends Activity {
 			// scroll to top
 			ScrollView mainScroll = (ScrollView) findViewById(R.id.scroller);
 			mainScroll.fullScroll(ScrollView.FOCUS_UP);
-
-			if (clickOn == cat1) {
-				llcat6.setVisibility(View.INVISIBLE);
-				llcat5.setVisibility(View.INVISIBLE);
-				llcat4.setVisibility(View.INVISIBLE);
-				llcat3.setVisibility(View.INVISIBLE);
-				llcat2.setVisibility(View.INVISIBLE);
-				llcat1.setVisibility(0);
-				lldivider6.setVisibility(View.INVISIBLE);
-				lldivider5.setVisibility(View.INVISIBLE);
-				lldivider4.setVisibility(View.INVISIBLE);
-				lldivider3.setVisibility(View.INVISIBLE);
-				lldivider2.setVisibility(View.INVISIBLE);
-				lldivider1.setVisibility(0);
-				buttonCount = 1;
-				
-			} else if (clickOn == cat2) {
-				llcat6.setVisibility(View.INVISIBLE);
-				llcat5.setVisibility(View.INVISIBLE);
-				llcat4.setVisibility(View.INVISIBLE);
-				llcat3.setVisibility(View.INVISIBLE);
-				llcat2.setVisibility(0);
-				llcat1.setVisibility(0);
-				lldivider6.setVisibility(View.INVISIBLE);
-				lldivider5.setVisibility(View.INVISIBLE);
-				lldivider4.setVisibility(View.INVISIBLE);
-				lldivider3.setVisibility(View.INVISIBLE);
-				lldivider2.setVisibility(0);
-				lldivider1.setVisibility(0);
-				buttonCount = 2;
-
-			} else if (clickOn == cat3) {
-				llcat6.setVisibility(View.INVISIBLE);
-				llcat5.setVisibility(View.INVISIBLE);
-				llcat4.setVisibility(View.INVISIBLE);
-				llcat3.setVisibility(0);
-				llcat2.setVisibility(0);
-				llcat1.setVisibility(0);
-				lldivider6.setVisibility(View.INVISIBLE);
-				lldivider5.setVisibility(View.INVISIBLE);
-				lldivider4.setVisibility(View.INVISIBLE);
-				lldivider3.setVisibility(0);
-				lldivider2.setVisibility(0);
-				lldivider1.setVisibility(0);
-				buttonCount = 3;
-
-			} else if (clickOn == cat4) {
-				llcat6.setVisibility(View.INVISIBLE);
-				llcat5.setVisibility(View.INVISIBLE);
-				llcat4.setVisibility(0);
-				llcat3.setVisibility(0);
-				llcat2.setVisibility(0);
-				llcat1.setVisibility(0);
-				lldivider6.setVisibility(View.INVISIBLE);
-				lldivider5.setVisibility(View.INVISIBLE);
-				lldivider4.setVisibility(0);
-				lldivider3.setVisibility(0);
-				lldivider2.setVisibility(0);
-				lldivider1.setVisibility(0);
-				buttonCount = 4;
-
-			} else if (clickOn == cat5) {
-				llcat6.setVisibility(View.INVISIBLE);
-				llcat5.setVisibility(0);
-				llcat4.setVisibility(0);
-				llcat3.setVisibility(0);
-				llcat2.setVisibility(0);
-				llcat1.setVisibility(0);
-				lldivider6.setVisibility(View.INVISIBLE);
-				lldivider5.setVisibility(0);
-				lldivider4.setVisibility(0);
-				lldivider3.setVisibility(0);
-				lldivider2.setVisibility(0);
-				lldivider1.setVisibility(0);
-				buttonCount = 5;
-
-			} else if (clickOn == cat6) {
-				llcat6.setVisibility(0);
-				llcat5.setVisibility(0);
-				llcat4.setVisibility(0);
-				llcat3.setVisibility(0);
-				llcat2.setVisibility(0);
-				llcat1.setVisibility(View.VISIBLE);
-				lldivider6.setVisibility(0);
-				lldivider5.setVisibility(0);
-				lldivider4.setVisibility(0);
-				lldivider3.setVisibility(0);
-				lldivider2.setVisibility(0);
-				lldivider1.setVisibility(0);
-				buttonCount = 6;
+			
+			// find which radio button
+			for (int i = 0; i < allRads.length; i++) {
+				if (clickOn.getId() == allRads[i]) {
+					buttonCount = i+1;
+					changeCatCount(buttonCount);
+					break;
+				}
 			}
 		}
 	};
 
-	public void uncheckAllRadioButtons() {
-		cat1.setChecked(false);
-		cat2.setChecked(false);
-		cat3.setChecked(false);
-		cat4.setChecked(false);
-		cat5.setChecked(false);
-		cat6.setChecked(false);
-	}
-
+	// clear button clears all text fields (and.. ?)
 	Button.OnClickListener myClearButtonClickListener = new Button.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			layoutName.setText("");
-			catName1.setText("");
-			catName2.setText("");
-			catName3.setText("");
-			catName4.setText("");
-			catName5.setText("");
-			catName6.setText("");
+			final int[] allTexts = {R.id.layout_name, R.id.text_cat1, R.id.text_cat2, R.id.text_cat3, R.id.text_cat4, R.id.text_cat5, R.id.text_cat6};
+			for (int i = 0; i < allTexts.length; i++) {
+				EditText name = (EditText) findViewById(allTexts[i]);
+				name.setText("");
+			}
+		}
+	};
+
+	// this cycles through the colours for each category
+	Button.OnClickListener myColourListener = new Button.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			Button clickOn = (Button) v;
+			int index = 0;
+
+			final int[] allTexts = {R.id.colours_cat1, R.id.colours_cat2, R.id.colours_cat3, R.id.colours_cat4, R.id.colours_cat5, R.id.colours_cat6};
+			for (int i = 0; i < allTexts.length; i++) {
+				if (clickOn.getId() == allTexts[i]) {
+					index = i;
+					break;
+				}
+			}
+
+			int currentColour = colourPointers.get(index);
+			currentColour++;
+			if (currentColour >= colourValues.length())
+				currentColour = 0;
+			colourPointers.set(index, currentColour);
+			clickOn.setBackgroundColor(colourValues.getColor(currentColour, 0));
 		}
 	};
 
@@ -232,40 +157,110 @@ public class SetupActivity extends Activity {
 	Button.OnClickListener myStartButtonClickListener = new Button.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-            Intent myIntent = new Intent(SetupActivity.this, CountingActivity.class);
-            myIntent.putExtra("buttonCount", buttonCount);
-            myIntent.putExtra("textArray", new ArrayList<String> (Arrays.asList(
-    				catName1.getText().toString(), catName2.getText().toString(), catName3.getText().toString(), catName4.getText().toString(), catName5.getText().toString(), catName6.getText().toString())));
-            myIntent.putExtra("colourPtrs", colourPointers);
-    		startActivityForResult(myIntent, 0);
+			Intent myIntent = new Intent(SetupActivity.this, CountingActivity.class);
+			EditText layout_name = (EditText) findViewById(R.id.layout_name);
+			
+			myIntent.putExtra("buttonCount", buttonCount);
+			myIntent.putExtra("textArray", getCategoryNames());
+			myIntent.putExtra("colourPtrs", colourPointers);
+	        myIntent.putExtra("catCounters", catCounters);
+			myIntent.putExtra("layout_name", layout_name.getText().toString());
+			startActivityForResult(myIntent, 0);
 		}
 	};
 
-	Button.OnClickListener myColourListener = new Button.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			Button clickOn = (Button) v;
-			int index = 0;
+	/**
+	 *  Menus
+	 */
 
-			if (clickOn == buttonCat1) index = 0;
-			else if (clickOn == buttonCat2) index = 1;
-			else if (clickOn == buttonCat3) index = 2;
-			else if (clickOn == buttonCat4) index = 3;
-			else if (clickOn == buttonCat5) index = 4;
-			else if (clickOn == buttonCat6) index = 5;
+	//	@Override
+	//	public boolean onCreateOptionsMenu(Menu menu) {
+	//		getMenuInflater().inflate(R.menu.activity_setup, menu);
+	//		return true;
+	//	}
 
-			int currentColour = colourPointers.get(index);
-			currentColour++;
-			if (currentColour >= colourValues.size())
-				currentColour = 0;
-			colourPointers.set(index, currentColour);
-			clickOn.setBackgroundColor(colourValues.get(currentColour));
-		}
-	};
+	/**
+	 *  Saving and Restoring State
+	 */
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_setup, menu);
-		return true;
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		super.onSaveInstanceState(savedInstanceState);
+		EditText layout_name = (EditText) findViewById(R.id.layout_name);
+
+		savedInstanceState.putInt("buttonCount", buttonCount);
+		savedInstanceState.putIntegerArrayList("colourPointers", colourPointers);
+		savedInstanceState.putIntegerArrayList("catCounters", catCounters);
+		savedInstanceState.putString("layout_name", layout_name.getText().toString());
+		savedInstanceState.putStringArrayList("catNames", getCategoryNames());
+	}
+
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		EditText layout_name = (EditText) findViewById(R.id.layout_name);
+
+		buttonCount = savedInstanceState.getInt("buttonCount");
+		Log.i(TAG, "resetting button count in restore saved to"+ buttonCount);
+		colourPointers = savedInstanceState.getIntegerArrayList("colourPointers");
+		catCounters = savedInstanceState.getIntegerArrayList("catCounters");
+		layout_name.setText(savedInstanceState.getString("layout_name"));
+		ArrayList<String> catNames = savedInstanceState.getStringArrayList("catNames");
+		resetColourButtons(colourPointers);
+		resetCategoryNames(catNames);
+		changeCatCount(buttonCount);
+	}
+
+	/**
+	 *  Helper Routines
+	 */
+
+	private void uncheckAllRadioButtons() {
+		for (int i = 0; i < allRads.length; i++) {
+			RadioButton rad = (RadioButton) findViewById(allRads[i]);
+			rad.setChecked(false);
+		}
+	}
+
+	private void changeCatCount(int count) {
+		final int[] allCats = {R.id.layout_cat1, R.id.layout_cat2, R.id.layout_cat3, R.id.layout_cat4, R.id.layout_cat5, R.id.layout_cat6};
+		final int[] allDivs = {R.id.cat_divider1, R.id.cat_divider2, R.id.cat_divider3, R.id.cat_divider4, R.id.cat_divider5, R.id.cat_divider6};
+		
+		for (int i = 0; i < count; i++) {
+			RelativeLayout llCat = (RelativeLayout) findViewById(allCats[i]);
+			View llDiv = (View) findViewById(allDivs[i]);
+			
+			llCat.setVisibility(View.VISIBLE);
+			llDiv.setVisibility(View.VISIBLE);
+		}
+		for (int i = count; i < allCats.length; i++) {
+			RelativeLayout llCat = (RelativeLayout) findViewById(allCats[i]);
+			View llDiv = (View) findViewById(allDivs[i]);
+			
+			llCat.setVisibility(View.INVISIBLE);
+			llDiv.setVisibility(View.INVISIBLE);
+		}
+	}
+
+	private void resetColourButtons(ArrayList<Integer> ptrs) {
+		for (int i = 0; i < allColours.length; i++) {
+			findViewById(allColours[i]).setBackgroundColor(colourValues.getColor(ptrs.get(i), 0));
+		}
+	}
+	
+	private ArrayList<String> getCategoryNames() {
+		ArrayList<String> output = new ArrayList<String>();
+		for (int i = 0; i < allCatNames.length; i++) {
+			EditText catName = (EditText) findViewById(allCatNames[i]);
+			output.add(catName.getText().toString());
+		}
+		return output;
+	}
+
+	private void resetCategoryNames(ArrayList<String> newCatNames) {
+		for (int i = 0; i < allCatNames.length; i++) {
+			EditText catName = (EditText) findViewById(allCatNames[i]);
+			catName.setText(newCatNames.get(i));
+		}
 	}
 }
