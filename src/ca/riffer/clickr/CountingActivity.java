@@ -162,7 +162,7 @@ public class CountingActivity extends Activity {
 				} else {
 					catCounters.set(index, catCounters.get(index) + 1);
 				}
-				clickOn.setText(textArray.get(index) + "\n\n" + catCounters.get(index));
+				clickOn.setText(textArray.get(index) + "\n" + catCounters.get(index));
 				break;
 			}
 			return true;
@@ -253,7 +253,7 @@ public class CountingActivity extends Activity {
 			Log.i(TAG, "i=" + i + "..");
 			Log.i(TAG, "i=" + i + "..text=" + textArray.get(i) + "..");
 			Log.i(TAG, "i=" + i + "..text=" + textArray.get(i) + "..counter=" + catCounters.get(i));
-			button.setText(textArray.get(i) + "\n\n" + catCounters.get(i));
+			button.setText(textArray.get(i) + " \n" + catCounters.get(i));
 		}
 	}
 

@@ -12,26 +12,11 @@
         android:orientation="horizontal"
         android:padding="5dp" >
 
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#d0b0b0"
-            android:textSize="15dip" />
+        <include layout="@layout/button1" />
 
-        <View
-            android:layout_width="10dp"
-            android:layout_height="0dp"
-            android:background="#808080" />
+        <include layout="@layout/spacer" />
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#a09a09"
-            android:textSize="15dip" />
+        <include layout="@layout/button2" />
     </LinearLayout>
 
     <LinearLayout
@@ -41,15 +26,9 @@
         android:orientation="horizontal"
         android:padding="5dp" >
 
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#456456"
-            android:textSize="15dip" />
+        <include layout="@layout/button3" />
     </LinearLayout>
 
-    <include layout="@layout/buttonbar2"/>
+    <include layout="@layout/buttonbar2" />
 
 </LinearLayout>

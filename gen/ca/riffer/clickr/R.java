@@ -23,13 +23,13 @@ public final class R {
         public static final int ic_launcher=0x7f020001;
     }
     public static final class id {
-        public static final int anchor=0x7f080035;
-        public static final int button1=0x7f080036;
-        public static final int button2=0x7f080037;
-        public static final int button3=0x7f080038;
-        public static final int button4=0x7f080039;
-        public static final int button5=0x7f08003a;
-        public static final int button6=0x7f08003b;
+        public static final int anchor=0x7f08003b;
+        public static final int button1=0x7f080032;
+        public static final int button2=0x7f080033;
+        public static final int button3=0x7f080034;
+        public static final int button4=0x7f080035;
+        public static final int button5=0x7f080036;
+        public static final int button6=0x7f080037;
         public static final int cat_divider1=0x7f080018;
         public static final int cat_divider2=0x7f08001d;
         public static final int cat_divider3=0x7f080022;
@@ -54,7 +54,7 @@ public final class R {
         public static final int layout_name_title=0x7f080003;
         public static final int load_layout=0x7f080007;
         public static final int menu_settings=0x7f08003c;
-        public static final int minus=0x7f080034;
+        public static final int minus=0x7f08003a;
         public static final int rad1=0x7f08000d;
         public static final int rad2=0x7f08000e;
         public static final int rad3=0x7f08000f;
@@ -63,11 +63,11 @@ public final class R {
         public static final int rad6=0x7f080012;
         public static final int radio_group=0x7f08000c;
         public static final int radiobuttons_title=0x7f08000b;
-        public static final int reset=0x7f080033;
+        public static final int reset=0x7f080039;
         public static final int save_layout=0x7f080006;
         public static final int scroller=0x7f08000a;
         public static final int second_divider=0x7f080009;
-        public static final int setup=0x7f080032;
+        public static final int setup=0x7f080038;
         public static final int start=0x7f080002;
         public static final int start_button=0x7f080000;
         public static final int startbutton_divider=0x7f080001;
@@ -87,14 +87,21 @@ public final class R {
     }
     public static final class layout {
         public static final int activity_setup=0x7f030000;
-        public static final int buttonbar2=0x7f030001;
-        public static final int correct4=0x7f030002;
-        public static final int counting_page1=0x7f030003;
-        public static final int counting_page2=0x7f030004;
-        public static final int counting_page3=0x7f030005;
-        public static final int counting_page4=0x7f030006;
-        public static final int counting_page5=0x7f030007;
-        public static final int counting_page6=0x7f030008;
+        public static final int button1=0x7f030001;
+        public static final int button2=0x7f030002;
+        public static final int button3=0x7f030003;
+        public static final int button4=0x7f030004;
+        public static final int button5=0x7f030005;
+        public static final int button6=0x7f030006;
+        public static final int buttonbar2=0x7f030007;
+        public static final int correct4=0x7f030008;
+        public static final int counting_page1=0x7f030009;
+        public static final int counting_page2=0x7f03000a;
+        public static final int counting_page3=0x7f03000b;
+        public static final int counting_page4=0x7f03000c;
+        public static final int counting_page5=0x7f03000d;
+        public static final int counting_page6=0x7f03000e;
+        public static final int spacer=0x7f03000f;
     }
     public static final class menu {
         public static final int activity_setup=0x7f070000;

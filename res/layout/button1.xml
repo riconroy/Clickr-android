@@ -1,0 +1,11 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="#d0b0b0"
+        android:textSize="25dip" />
+
+</merge>
