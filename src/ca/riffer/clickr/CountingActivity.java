@@ -8,6 +8,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -20,9 +22,11 @@ public class CountingActivity extends Activity {
 	private String layout_name;
 	private ArrayList<String> textArray = new ArrayList<String>();
 	private ArrayList<Integer> colourPointers = new ArrayList<Integer>();
+	private boolean countBackwards = false;
 	
 	// this is where we'll store the colour variables
 	private TypedArray colourValues, colourValuesLight;
+	private Drawable defaultDrawable;
 
 	// maintain a counter for each button
 	private ArrayList<Integer> catCounters = new ArrayList<Integer> (Arrays.asList(0, 0, 0, 0, 0, 0));
@@ -55,6 +59,7 @@ public class CountingActivity extends Activity {
 			  textArray = savedInstanceState.getStringArrayList("textArray");
 	    }
 
+	    // number of categories the user chose determines which content view we use 
 		if (buttonCount == 1) {
 			setContentView(R.layout.counting_page1);
 			activeButtons = new ArrayList<Integer> (Arrays.asList(
@@ -86,7 +91,7 @@ public class CountingActivity extends Activity {
 					R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5, R.id.button6));
 		}
 		
-		// set the default button names, if needed
+		// if the buttons don't have user-given names, give generic 1-6 names
 		final ArrayList<String> defaultButtonNames = new ArrayList<String> (Arrays.asList(
 				"one", "two", "three", "four", "five", "six"));
 		for (int i=0; i < textArray.size(); i++) {
@@ -149,7 +154,14 @@ public class CountingActivity extends Activity {
 				break;
 			case MotionEvent.ACTION_UP:
 				clickOn.setBackgroundColor(colourValues.getColor(colourPointers.get(index), 0));
-				catCounters.set(index, catCounters.get(index) + 1);
+				if (countBackwards) {
+					catCounters.set(index, catCounters.get(index) - 1);
+			    	Button minus = (Button) findViewById(R.id.minus);
+		        	minus.setBackgroundDrawable(defaultDrawable);
+					countBackwards = false;
+				} else {
+					catCounters.set(index, catCounters.get(index) + 1);
+				}
 				clickOn.setText(textArray.get(index) + "\n\n" + catCounters.get(index));
 				break;
 			}
@@ -157,6 +169,7 @@ public class CountingActivity extends Activity {
 		}
 	};
 	
+	// user clicked on "reset counters" button
 	public void resetCounters(View view) {
 		Log.i(TAG, "reset button clicked on");
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -176,7 +189,8 @@ public class CountingActivity extends Activity {
 		AlertDialog alert = builder.create();
 		alert.show();
 	}
-	
+
+	// user clicked on "setup" button
 	public void backToSetup(View view) {
 		Log.i(TAG, "setup button clicked on");
         Intent myIntent = new Intent(CountingActivity.this, SetupActivity.class);
@@ -186,6 +200,21 @@ public class CountingActivity extends Activity {
         myIntent.putExtra("colourPtrs", colourPointers);
         myIntent.putExtra("layout_name", layout_name);
 		startActivityForResult(myIntent, 0);
+	}
+
+	// user clicked on "minus" button
+	public void reverseNextCount(View view) {
+		Log.i(TAG, "minus button clicked on");
+    	Button minus = (Button) findViewById(R.id.minus);
+    	
+        if (countBackwards) {
+        	countBackwards = false;
+        	minus.setBackgroundDrawable(defaultDrawable);
+        } else {
+        	countBackwards = true;
+        	defaultDrawable = minus.getBackground();
+        	minus.setBackgroundColor(Color.RED);
+        }
 	}
 	
 	/**
