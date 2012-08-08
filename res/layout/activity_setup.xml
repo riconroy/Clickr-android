@@ -79,6 +79,7 @@
         android:layout_marginLeft="0dip"
         android:layout_toLeftOf="@+id/load_layout"
         android:text="@string/save_layout"
+        android:onClick="saveLayout"
         android:textSize="15dip" />
 
     <Button
@@ -89,6 +90,7 @@
         android:layout_marginLeft="20dip"
         android:layout_toLeftOf="@+id/clear_layout"
         android:text="@string/load_layout"
+        android:onClick="loadLayout"
         android:textSize="15dip" />
 
     <Button

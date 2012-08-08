@@ -3,8 +3,15 @@ package ca.riffer.clickr;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +36,7 @@ public class SetupActivity extends Activity {
 	private TypedArray colourValues;
 
 	int buttonCount = 6;
+	private EditText layout_name;
 
 	// maintain a list of pointers to each button's current colour
 	private ArrayList<Integer> colourPointers = new ArrayList<Integer> (Arrays.asList(0, 0, 0, 0, 0, 0));
@@ -37,12 +45,14 @@ public class SetupActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setup);
-		Log.i(TAG, "layout is fine");
 
 		// choosing the number of categories (by radio buttons)
 		for (int i = 0; i < allRads.length; i++) {
 			findViewById(allRads[i]).setOnClickListener(myOptionOnClickListener);
 		}
+		
+		// store the layout name for saving
+		layout_name = (EditText) findViewById(R.id.layout_name);
 
 		// the clear button clears the values in the setup screen
 		findViewById(R.id.clear_layout).setOnClickListener(myClearButtonClickListener);
@@ -63,7 +73,6 @@ public class SetupActivity extends Activity {
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			buttonCount = extras.getInt("buttonCount");
-			Log.i(TAG, "resetting button count in extras to"+ buttonCount);
 			ArrayList<String> textArray = extras.getStringArrayList("textArray");
 			colourPointers = extras.getIntegerArrayList("colourPtrs");
 			catCounters = extras.getIntegerArrayList("catCounters");
@@ -77,7 +86,6 @@ public class SetupActivity extends Activity {
 			// Restore value of members from saved state
 			
 			buttonCount = savedInstanceState.getInt("buttonCount");
-			Log.i(TAG, "resetting button count in saved instance to"+ buttonCount);
 			colourPointers = savedInstanceState.getIntegerArrayList("colourPointers");
 			layout_name.setText(savedInstanceState.getString("layout_name"));
 			catCounters = savedInstanceState.getIntegerArrayList("catCounters");
@@ -92,7 +100,179 @@ public class SetupActivity extends Activity {
 	}
 
 	/**
-	 *  Listeners
+	 *  Listeners for Save, Open, and Clear buttons
+	 */
+
+	// save button saves the current layout (after checking with a dialog)
+	public void saveLayout(View v) {
+		// we also shouldn't accept a name with a comma in it!
+		if (layout_name.getText().toString().equals("")) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage("Please name the layout before saving it.")
+			.setCancelable(false)
+			.setPositiveButton("okay", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.cancel();
+				}
+			});
+			AlertDialog alert = builder.create();
+			alert.show();
+
+		} else {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage("Do you want to save this layout under the name \"" + layout_name.getText().toString() + "\"?")
+			.setCancelable(false)
+			.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					// first get the layout "file" from user prefs
+					JSONArray layoutArray = new JSONArray();
+					SharedPreferences settings = getPreferences(MODE_PRIVATE);
+					String layouts = settings.getString("layouts_string", "NA");
+					if (layouts.equals("NA")) {
+						Log.i(TAG, "user prefs \"layouts\" not found");
+					} else {
+						// exists; change to JSON
+						try {
+							JSONArray oldLayoutArray = new JSONArray(layouts);
+							for (int i = 0; i < oldLayoutArray.length(); i++) {
+								layoutArray.put(oldLayoutArray.get(i));
+							}
+						} catch (JSONException e) {
+							Log.e(TAG, "trouble converting layout file to JSON array");
+							e.printStackTrace();
+						}
+					}
+
+					// create a new JSON object for the array
+					JSONObject jo = new JSONObject();
+					try {
+						jo.put("title", layout_name.getText().toString());
+						jo.put("catNames", getCategoryNamesAsString());
+						jo.put("catColours", getColourPointersAsString());
+						jo.put("catCount", buttonCount);
+
+						layoutArray.put(jo);
+
+					} catch (JSONException e) {
+						Log.e(TAG, "error in creating JSON Object");
+						e.printStackTrace();
+					}
+
+					// finally, write the JSONArray (as a string) back out to the user prefs
+					SharedPreferences.Editor editor = settings.edit();
+					editor.putString("layouts_string", layoutArray.toString());
+					// Commit the edits!
+					editor.commit();
+				}
+			})
+			.setNegativeButton("No", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.cancel();
+				}
+			});
+			AlertDialog alert = builder.create();
+			alert.show();
+		}
+	}
+
+	// open button gets all the layouts, and allows user to choose one
+	public void loadLayout(View v) {
+		final ArrayList<String> titles = new ArrayList<String>();
+		
+        SharedPreferences settings = getPreferences(MODE_PRIVATE);
+        String layouts = settings.getString("layouts_string", "NA");
+        if (layouts.equals("NA")) {
+			Log.i(TAG, "user prefs \"layouts\" not found");
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage("There are no saved layouts.")
+			.setCancelable(false)
+			.setPositiveButton("okay", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.cancel();
+				}
+			});
+			AlertDialog alert = builder.create();
+			alert.show();
+			
+        } else {
+        	// exists; change to JSON
+        	final JSONArray layoutArray = new JSONArray();
+        	try {
+				JSONArray storedArray = new JSONArray(layouts);
+			    for (int i = 0; i < storedArray.length(); i++) {
+			    	JSONObject eachLayout = (JSONObject) storedArray.get(i);
+			    	if (eachLayout.has("title")) {
+			    		titles.add(eachLayout.getString("title"));
+			    	}
+					layoutArray.put(storedArray.get(i));
+			    }
+			} catch (JSONException e) {
+				Log.e(TAG, "trouble converting layout file to JSON array, or JSONArray to JSONObjects");
+				e.printStackTrace();
+			}
+        	
+        	// make a dialog with all the titles			
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("Pick a layout");
+			builder.setItems(titles.toArray(new CharSequence[titles.size()]), new DialogInterface.OnClickListener() {
+			    public void onClick(DialogInterface dialog, int chosen) {
+			        // Toast.makeText(getApplicationContext(), titles.get(chosen), Toast.LENGTH_SHORT).show();
+			    	JSONObject desiredLayout = new JSONObject();
+					try {
+						desiredLayout = layoutArray.getJSONObject(chosen);
+						buttonCount = desiredLayout.getInt("catCount");
+						String colourPtrsString = desiredLayout.getString("catColours");
+						colourPointers = stringToArrayListInteger(colourPtrsString, ",");
+						layout_name.setText(desiredLayout.getString("title"));
+						// we should reset the counters
+						catCounters = new ArrayList<Integer> (Arrays.asList(0, 0, 0, 0, 0, 0));
+						String catNamesString = desiredLayout.getString("catNames");
+						String[] catNamesArray = catNamesString.split(",", -1);
+						ArrayList<String> catNames = new ArrayList<String>(Arrays.asList(catNamesArray));
+
+						resetCategoryNames(catNames);
+						changeCatCount(buttonCount);
+						resetColourButtons(colourPointers);
+
+						uncheckAllRadioButtons();
+						RadioButton rad = (RadioButton) findViewById(allRads[buttonCount-1]);
+						rad.setChecked(true);
+						
+					} catch (JSONException e) {
+						Log.e(TAG, "problem getting JSON object in loadLayout");
+						e.printStackTrace();
+					}
+			    	
+			    }
+			});
+			AlertDialog alert = builder.create();
+			alert.show();
+        }
+	}
+
+	// clear button clears all text fields (and.. ?)
+	Button.OnClickListener myClearButtonClickListener = new Button.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			final int[] allTexts = {R.id.layout_name, R.id.text_cat1, R.id.text_cat2, R.id.text_cat3, R.id.text_cat4, R.id.text_cat5, R.id.text_cat6};
+			for (int i = 0; i < allTexts.length; i++) {
+				EditText name = (EditText) findViewById(allTexts[i]);
+				name.setText("");
+			}
+			// reset the counters and the colours
+			catCounters = new ArrayList<Integer> (Arrays.asList(0, 0, 0, 0, 0, 0));
+			colourPointers = new ArrayList<Integer> (Arrays.asList(0, 0, 0, 0, 0, 0));
+			resetColourButtons(colourPointers);
+			buttonCount = 6;
+			changeCatCount(buttonCount);
+			uncheckAllRadioButtons();
+			RadioButton rad = (RadioButton) findViewById(allRads[buttonCount-1]);
+			rad.setChecked(true);
+		}
+	};
+
+	/**
+	 *  Other Listeners
 	 */
 
 	// radio buttons change the number of categories needed
@@ -113,18 +293,6 @@ public class SetupActivity extends Activity {
 					changeCatCount(buttonCount);
 					break;
 				}
-			}
-		}
-	};
-
-	// clear button clears all text fields (and.. ?)
-	Button.OnClickListener myClearButtonClickListener = new Button.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			final int[] allTexts = {R.id.layout_name, R.id.text_cat1, R.id.text_cat2, R.id.text_cat3, R.id.text_cat4, R.id.text_cat5, R.id.text_cat6};
-			for (int i = 0; i < allTexts.length; i++) {
-				EditText name = (EditText) findViewById(allTexts[i]);
-				name.setText("");
 			}
 		}
 	};
@@ -201,7 +369,6 @@ public class SetupActivity extends Activity {
 		EditText layout_name = (EditText) findViewById(R.id.layout_name);
 
 		buttonCount = savedInstanceState.getInt("buttonCount");
-		Log.i(TAG, "resetting button count in restore saved to"+ buttonCount);
 		colourPointers = savedInstanceState.getIntegerArrayList("colourPointers");
 		catCounters = savedInstanceState.getIntegerArrayList("catCounters");
 		layout_name.setText(savedInstanceState.getString("layout_name"));
@@ -247,12 +414,51 @@ public class SetupActivity extends Activity {
 			findViewById(allColours[i]).setBackgroundColor(colourValues.getColor(ptrs.get(i), 0));
 		}
 	}
-	
+
+	// returns all six category names in an arrayList
 	private ArrayList<String> getCategoryNames() {
 		ArrayList<String> output = new ArrayList<String>();
 		for (int i = 0; i < allCatNames.length; i++) {
 			EditText catName = (EditText) findViewById(allCatNames[i]);
 			output.add(catName.getText().toString());
+		}
+		return output;
+	}
+
+	// returns all six category names in a String
+	private String getCategoryNamesAsString() {
+		String output = "";
+		for (int i = 0; i < allCatNames.length; i++) {
+			if (! output.equals("")) {
+				output += ",";
+			}
+			EditText catName = (EditText) findViewById(allCatNames[i]);
+			output += catName.getText().toString();
+		}
+		return output;
+	}
+
+	// returns all six colour pointers as a String
+	private String getColourPointersAsString() {
+		String output = "";
+		for (int i = 0; i < colourPointers.size(); i++) {
+			if (! output.equals("")) {
+				output += ",";
+			}
+			Integer theNumber = colourPointers.get(i);
+			output += theNumber.toString();
+		}
+		return output;
+	}
+	
+	// given a string, return an ArrayList<Integer>
+	private ArrayList<Integer> stringToArrayListInteger(String incoming, String limiter) {
+		ArrayList<Integer> output = new ArrayList<Integer>();
+		String[] stringArr = incoming.split(limiter, -1);
+		// Log.i(TAG, "stringArr = " + Arrays.toString(stringArr));
+		for (String s:stringArr) {
+			int inty = Integer.valueOf(s);
+			output.add(inty);
 		}
 		return output;
 	}
