@@ -15,7 +15,7 @@
         android:textSize="12dip" />
 
     <View
-        android:layout_width="10dp"
+        android:layout_width="5dp"
         android:layout_height="0dp"
         android:background="#808080" />
 
@@ -23,13 +23,13 @@
         android:id="@+id/reset"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="3"
+        android:layout_weight="2"
         android:onClick="resetCounters"
         android:text="@string/reset"
         android:textSize="12dip" />
 
     <View
-        android:layout_width="10dp"
+        android:layout_width="5dp"
         android:layout_height="0dp"
         android:background="#808080" />
 

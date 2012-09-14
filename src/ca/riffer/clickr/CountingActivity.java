@@ -1,7 +1,9 @@
 package ca.riffer.clickr;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -11,13 +13,15 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
 public class CountingActivity extends Activity {
-	private static final String TAG = "SetupActivity";
+	// private static final String TAG = "SetupActivity";
 	private int buttonCount;
 	private String layout_name;
 	private ArrayList<String> textArray = new ArrayList<String>();
@@ -30,10 +34,12 @@ public class CountingActivity extends Activity {
 
 	// maintain a counter for each button
 	private ArrayList<Integer> catCounters = new ArrayList<Integer> (Arrays.asList(0, 0, 0, 0, 0, 0));
+	
+	// for now, a timestamp for the first count
+	Date startCountTime = null;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.i(TAG, "creating counting activity");
 		
 		final ArrayList<Integer> activeButtons;
 		
@@ -117,6 +123,49 @@ public class CountingActivity extends Activity {
 	}
 	
 	/**
+	 *  Menus
+	 */
+	 
+    // Initiating Menu XML file (menu.xml)
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.clickr_menu, menu);
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.menu_email:
+            	// prepare the email
+            	String subj;
+            	if (layout_name.equals("")) {
+            		subj = "Clickr Data";
+            	} else {
+            		subj = "Clickr Data: " + layout_name;
+            	}
+            	// String myTo = "rick.conroy@bellmedia.ca";
+            	// String myTo = "riconroy@gmail.com";
+            	
+            	// send the email (using the favourite email program)
+            	Intent intent = new Intent(Intent.ACTION_SEND);
+            	intent.setType("text/plain");
+            	// intent.putExtra(Intent.EXTRA_EMAIL, new String[] {myTo});
+            	intent.putExtra(Intent.EXTRA_SUBJECT, subj);
+            	intent.putExtra(Intent.EXTRA_TEXT, prepareEmailBody());
+
+            	startActivity(Intent.createChooser(intent, "Send Email"));
+                return true;
+                
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+	
+	/**
 	 *  Listeners
 	 */
 
@@ -163,6 +212,10 @@ public class CountingActivity extends Activity {
 					catCounters.set(index, catCounters.get(index) + 1);
 				}
 				clickOn.setText(textArray.get(index) + "\n" + catCounters.get(index));
+				
+				// mark start time if needed
+				if (startCountTime == null)
+					startCountTime = new Timestamp(System.currentTimeMillis());
 				break;
 			}
 			return true;
@@ -171,7 +224,6 @@ public class CountingActivity extends Activity {
 	
 	// user clicked on "reset counters" button
 	public void resetCounters(View view) {
-		Log.i(TAG, "reset button clicked on");
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage("Are you sure you want to reset the counters?")
 		       .setCancelable(false)
@@ -179,6 +231,7 @@ public class CountingActivity extends Activity {
 		           public void onClick(DialogInterface dialog, int id) {
 		        	   catCounters = new ArrayList<Integer> (Arrays.asList(0, 0, 0, 0, 0, 0));
 		        	   setAllTextCounters();
+		        	   startCountTime = null; // reset starting time
 		           }
 		       })
 		       .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -192,7 +245,6 @@ public class CountingActivity extends Activity {
 
 	// user clicked on "setup" button
 	public void backToSetup(View view) {
-		Log.i(TAG, "setup button clicked on");
         Intent myIntent = new Intent(CountingActivity.this, SetupActivity.class);
         myIntent.putExtra("buttonCount", buttonCount);
         myIntent.putExtra("textArray", textArray);
@@ -204,7 +256,6 @@ public class CountingActivity extends Activity {
 
 	// user clicked on "minus" button
 	public void reverseNextCount(View view) {
-		Log.i(TAG, "minus button clicked on");
     	Button minus = (Button) findViewById(R.id.minus);
     	
         if (countBackwards) {
@@ -250,11 +301,48 @@ public class CountingActivity extends Activity {
 		final int[] allButtons = {R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5, R.id.button6};
 		for (int i = 0; i < buttonCount; i++) {
 			Button button = (Button) findViewById(allButtons[i]);
-			Log.i(TAG, "i=" + i + "..");
-			Log.i(TAG, "i=" + i + "..text=" + textArray.get(i) + "..");
-			Log.i(TAG, "i=" + i + "..text=" + textArray.get(i) + "..counter=" + catCounters.get(i));
 			button.setText(textArray.get(i) + " \n" + catCounters.get(i));
 		}
+	}
+	
+	private String prepareEmailBody() {
+		// replacing tab (\t) with four spaces. Lame!
+		String s1 = "Layout Name: " + layout_name + "\n";
+		String s2 = "Number of categories: " + buttonCount + "\n";
+		String s3 = "Starting time: " + startCountTime + "\n";
+		Date nowTime = new Timestamp(System.currentTimeMillis());
+		String s4 = "Sending time: " + nowTime + "\n\n";
+		String s5 = "";
+		for (int i = 0; i < buttonCount; i++) {
+			s5 += "Category " + (i+1) + ": " + textArray.get(i) + "\n";
+			s5 += "    Count: " + catCounters.get(i) + "\n";
+		}
+		
+		// JSON version
+		String s10 = "\n/* ***************\n *  JSON String\n */\n";
+		String s20 = "{\n";
+		String s21 = "    \"layoutName\" : \"" + layout_name + "\",\n";
+		String s22 = "    \"categoryCount\" : " + buttonCount + ",\n";
+		String s23 = "    \"startTimestamp\" : \"" + startCountTime + "\",\n";
+		String s24 = "    \"sendTimestamp\" : \"" + nowTime + "\",\n";
+		String s25 = "    \"data\" : [\n";
+		String s30 = "";
+		for (int i = 0; i < buttonCount; i++) {
+			s30 += "        {\n";
+			s30 += "            \"categoryNumber\" : " + (i+1) + ",\n";
+			s30 += "            \"categoryName\" : \"" + textArray.get(i) + "\",\n";
+			s30 += "            \"categoryCount\" : " + catCounters.get(i) + "\n";
+			if (i < (buttonCount - 1)) {
+				s30 += "        },\n";
+			} else {
+				s30 += "        }\n";
+			}
+		}
+		String s32 = "    ]\n";
+		String s33 = "}\n";
+		String s40 = "/* ***************\n *  end JSON String\n */";
+		
+		return s1 + s2 +s3 + s4 + s5 + s10 + s20 + s21 + s22 + s23 + s24 + s25 + s30 + s32 + s33 + s40;
 	}
 
 }

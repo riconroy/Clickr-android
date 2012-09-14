@@ -14,7 +14,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,7 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
 public class SetupActivity extends Activity {
-	private static final String TAG = "SetupActivity";
+	// private static final String TAG = "SetupActivity";
 	
 	private int[] allRads = {R.id.rad1, R.id.rad2, R.id.rad3, R.id.rad4, R.id.rad5, R.id.rad6};
 	private int[] allCatNames = {R.id.text_cat1, R.id.text_cat2, R.id.text_cat3, R.id.text_cat4, R.id.text_cat5, R.id.text_cat6};
@@ -129,7 +128,7 @@ public class SetupActivity extends Activity {
 					SharedPreferences settings = getPreferences(MODE_PRIVATE);
 					String layouts = settings.getString("layouts_string", "NA");
 					if (layouts.equals("NA")) {
-						Log.i(TAG, "user prefs \"layouts\" not found");
+						// Log.i(TAG, "user prefs \"layouts\" not found");
 					} else {
 						// exists; change to JSON
 						try {
@@ -138,7 +137,7 @@ public class SetupActivity extends Activity {
 								layoutArray.put(oldLayoutArray.get(i));
 							}
 						} catch (JSONException e) {
-							Log.e(TAG, "trouble converting layout file to JSON array");
+							// Log.e(TAG, "trouble converting layout file to JSON array");
 							e.printStackTrace();
 						}
 					}
@@ -154,7 +153,7 @@ public class SetupActivity extends Activity {
 						layoutArray.put(jo);
 
 					} catch (JSONException e) {
-						Log.e(TAG, "error in creating JSON Object");
+						// Log.e(TAG, "error in creating JSON Object");
 						e.printStackTrace();
 					}
 
@@ -182,7 +181,7 @@ public class SetupActivity extends Activity {
         SharedPreferences settings = getPreferences(MODE_PRIVATE);
         String layouts = settings.getString("layouts_string", "NA");
         if (layouts.equals("NA")) {
-			Log.i(TAG, "user prefs \"layouts\" not found");
+			// Log.i(TAG, "user prefs \"layouts\" not found");
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setMessage("There are no saved layouts.")
 			.setCancelable(false)
@@ -207,7 +206,7 @@ public class SetupActivity extends Activity {
 					layoutArray.put(storedArray.get(i));
 			    }
 			} catch (JSONException e) {
-				Log.e(TAG, "trouble converting layout file to JSON array, or JSONArray to JSONObjects");
+				// Log.e(TAG, "trouble converting layout file to JSON array, or JSONArray to JSONObjects");
 				e.printStackTrace();
 			}
         	
@@ -239,7 +238,7 @@ public class SetupActivity extends Activity {
 						rad.setChecked(true);
 						
 					} catch (JSONException e) {
-						Log.e(TAG, "problem getting JSON object in loadLayout");
+						// Log.e(TAG, "problem getting JSON object in loadLayout");
 						e.printStackTrace();
 					}
 			    	
